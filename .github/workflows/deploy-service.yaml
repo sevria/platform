@@ -2,6 +2,13 @@ name: Deploy service
 
 on:
   workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      hostname:
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -12,4 +19,12 @@ jobs:
     uses: ./.github/workflows/build-docker-image.yaml
     secrets: inherit
     with:
+      template: service
+
+  run:
+    uses: ./.github/workflows/run-container.yaml
+    secrets: inherit
+    with:
+      environment: ${{ inputs.environment }}
+      hostname: ${{ inputs.hostname }}
       template: service
