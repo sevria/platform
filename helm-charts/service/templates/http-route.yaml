@@ -15,4 +15,4 @@ spec:
   rules:
     - backendRefs:
         - name: {{ .Release.Name }}
-          port: {{ .Values.service.ports[0].targetPort }}
+          port: 3000
