@@ -34,4 +34,4 @@ spec:
               port: {{ (index .Values.service.ports 0).targetPort }}
             initialDelaySeconds: 5
       imagePullSecrets:
-        - name: ghcr-login
+        - name: ghcr
