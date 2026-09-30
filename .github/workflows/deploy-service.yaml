@@ -1,0 +1,15 @@
+name: Deploy service
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    uses: ./build-docker-image.yaml
+    secrets: inherit
+    with:
+      template: service
