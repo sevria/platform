@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+      {{- if eq .Values.deployment.image.pullPolicy "Always" }}
+      annotations:
+        rollme: {{ randAlphaNum 7 | quote }}
+      {{- end }}
+    spec:
+      terminationGracePeriodSeconds: 90
+      containers:
+        - name: {{ .Release.Name }}
+          image: {{ .Values.deployment.image.tag }}
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          ports:
+            - containerPort: {{ (index .Values.service.ports 0).targetPort }}
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ (index .Values.service.ports 0).targetPort }}
+            initialDelaySeconds: 5
+      imagePullSecrets:
+        - name: ghcr-login
