@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   build:
-    uses: ./build-docker-image.yaml
+    uses: ./.github/workflows/build-docker-image.yaml
     secrets: inherit
     with:
       template: service
