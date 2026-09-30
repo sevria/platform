@@ -23,6 +23,8 @@ jobs:
 
   run:
     uses: ./.github/workflows/run-container.yaml
+    needs:
+      - build
     secrets: inherit
     with:
       environment: ${{ inputs.environment }}
