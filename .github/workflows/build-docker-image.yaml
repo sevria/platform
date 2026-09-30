@@ -21,8 +21,9 @@ jobs:
 
       - name: Checkout platform repository
         uses: actions/checkout@v7
-        repository: sevria/platform
-        path: platform
+        with:
+          repository: sevria/platform
+          path: platform
 
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v4
