@@ -20,7 +20,6 @@ spec:
         rollme: {{ randAlphaNum 7 | quote }}
       {{- end }}
     spec:
-      terminationGracePeriodSeconds: 90
       containers:
         - name: {{ .Release.Name }}
           image: {{ .Values.deployment.image.tag }}
@@ -32,6 +31,5 @@ spec:
             httpGet:
               path: /
               port: {{ (index .Values.service.ports 0).targetPort }}
-            initialDelaySeconds: 5
       imagePullSecrets:
         - name: ghcr
