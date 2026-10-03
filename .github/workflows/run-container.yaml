@@ -6,45 +6,15 @@ on:
       environment:
         required: true
         type: string
-      hostname:
-        required: true
-        type: string
-      template:
-        required: true
-        type: string
 
 jobs:
   container:
     runs-on: ${{ inputs.environment }}
     timeout-minutes: 10
     steps:
-      - name: Checkout helm charts repository
-        uses: actions/checkout@v7
-        with:
-          repository: sevria/platform
-
-      - name: Determine namespace by template
-        id: namespace
-        shell: bash
-        run: |
-          case "${{ inputs.template }}" in
-            service)
-              namespace="backend"
-              ;;
-            *)
-              echo "Unknown template: ${{ inputs.template }}"
-              exit 1
-              ;;
-          esac
-
-          echo "namespace=$namespace" >> "$GITHUB_OUTPUT"
-          echo "Using namespace: $namespace"
-
       - name: Deploy
         run: |
-          helm upgrade --install \
-            ${{ github.event.repository.name }} \
-            ./helm-charts/${{ inputs.template }} \
-            --namespace ${{ steps.namespace.outputs.namespace }} \
-            --set deployment.image.tag=ghcr.io/sevria/${{ github.event.repository.name }}:main \
-            --set gateway.httpRoute.hostname=${{ inputs.hostname }}
+          project=${{ github.event.repository.name }}
+          cd code-workspaces/sevria/deployments/local
+          docker compose pull $project
+          docker compose up -d $project
