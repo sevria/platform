@@ -16,7 +16,7 @@ jobs:
     uses: ./.github/workflows/build-docker-image.yaml
     secrets: inherit
     with:
-      template: service
+      template: frontend
 
   run:
     uses: ./.github/workflows/run-container.yaml
